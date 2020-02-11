@@ -1,28 +1,15 @@
 const path = require("path");
+const merge = require("webpack-merge");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const base = require("./webpack.config.base");
 
-const ENTRY = path.join(__dirname, "source");
 const OUTPUT = path.join(__dirname, "build");
 const STATIC = path.join(__dirname, "static");
 
-module.exports = {
+module.exports = merge(base, {
 	mode: "production",
-	entry: path.join(ENTRY, "index.jsx"),
-	output: {
-		path: OUTPUT,
-		filename: "js/index.js",
-	},
-	resolve: {
-		extensions: [".js", ".jsx"],
-		modules: [ENTRY, "node_modules"],
-	},
 	plugins: [
-		new HtmlWebpackPlugin({
-			template: path.join(STATIC, "index.html"),
-			filename: "index.html",
-			path: OUTPUT,
-		}),
 		new HtmlWebpackPlugin({
 			template: path.join(STATIC, "index.html"),
 			filename: "404.html",
@@ -36,21 +23,7 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				test: /\.js[x]?$/,
-				exclude: /node_modules/,
-				use: {
-					loader: "babel-loader",
-					options: {
-						presets: [["@babel/env", { modules: false }], "@babel/react"],
-						plugins: [
-							"@babel/plugin-proposal-class-properties",
-							"react-hot-loader/babel",
-						],
-					},
-				},
-			},
-			{
-				test: /\.css/,
+				test: /\.less/,
 				use: [
 					{
 						loader: MiniCssExtractPlugin.loader,
@@ -59,16 +32,17 @@ module.exports = {
 						},
 					},
 					"css-loader",
+					"less-loader",
 				],
 			},
 			{
 				test: /\.(png|jpg|jpeg|svg|gif|mp3|eot|woff|woff2|ttf)([\\?]?.*)$/,
 				loader: "file-loader",
 				options: {
-					name: "[hash].[ext]",
+					name: "[hash:5].[ext]",
 					publicPath: "./assets",
 				},
 			},
 		],
 	},
-};
+});
