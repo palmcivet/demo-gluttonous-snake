@@ -2,6 +2,7 @@ import { Snake } from "./snake";
 import { MAP } from "./config";
 import { dirOrien } from "../../Config/reference";
 import { randPosition, arr2num } from "./utils";
+import { creator } from "../../Stores/game";
 
 /**
  * @class 描述一局游戏
@@ -90,7 +91,6 @@ class Game {
 		for (let cell = 0; cell < MAP.BG_CELL * MAP.BG_LINE; cell++) {
 			for (let snake = 0; snake < snakeMap.length; snake++) {
 				// console.log(snake);
-
 				if (cell == snakeMap[snake]) {
 					document.getElementById(cell.toString()).className = "cell-block";
 				} else if (cell === this.food) {

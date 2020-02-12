@@ -1,6 +1,6 @@
 const MAP = {
-	BG_LINE: 30,
-	BG_CELL: 15,
+	BG_LINE: 22,
+	BG_CELL: 12,
 	TURN_COLOR: 0.5, // 蛇身体和头部计算差
 	SPD_SNAKE: 600, // 移动速度
 	SPD_REFRESH: 200, // 0.2s
