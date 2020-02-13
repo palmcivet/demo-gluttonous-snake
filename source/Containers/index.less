@@ -1,0 +1,77 @@
+@import "../Styles/variable.less";
+
+.Response {
+	@border-width: 4px;
+
+	// Other small device
+	@media only screen and (max-height: 320px) {
+		width: 320px - 2 * @border-width;
+		height: 568px - 2 * @border-width;
+	}
+
+	// 6/7/8
+	@media (device-height: 667px) and (-webkit-min-device-pixel-ratio: 2) {
+		width: 375px - 2 * @border-width;
+		height: 667px - 2 * @border-width;
+	}
+
+	// 6/7/8 Plus
+	@media (device-height: 736px) and (-webkit-min-device-pixel-ratio: 2) {
+		width: 414px - 2 * @border-width;
+		height: 736px - 2 * @border-width;
+	}
+
+	// X/XS
+	@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
+		width: 375px - 2 * @border-width;
+		height: 812px - 2 * @border-width;
+	}
+
+	@media only screen and (min-width: 1024px) {
+	}
+
+	max-width: 434px - 2 * @border-width;
+	max-height: 812px - 2 * @border-width;
+	border: @border-width solid;
+}
+
+div .console {
+	.Response();
+	border-radius: 25px;
+	border-color: #d1ff61 #689a1a #689a1a #d1ff61;
+
+	top: 50%;
+	left: 50%;
+	position: absolute;
+	transform: translate(-50%, -50%);
+
+	display: grid;
+	grid-row-gap: 0px;
+	grid-column-gap: 0px;
+	grid-template-rows: 1fr 0.618fr;
+	grid-template-columns: 1fr;
+	place-content: center center;
+	background-color: #a2c64b;
+
+	.frame {
+		align-self: flex-end;
+		justify-self: center;
+
+		.decoration {
+			padding: 12px;
+			border: 8px solid black;
+			border-radius: 20px;
+
+			.chamfer {
+				width: 292px;
+				border: 5px solid;
+				border-color: #689a1a #d1ff61 #d1ff61 #689a1a;
+			}
+		}
+	}
+
+	.pannel {
+		align-self: flex-start;
+		height: 226px;
+	}
+}

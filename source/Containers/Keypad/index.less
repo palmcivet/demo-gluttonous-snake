@@ -1,0 +1,201 @@
+@import "../../Styles/variable.less";
+
+.Pseudo(@width, @height, @radius:50%) {
+	&::after {
+		content: "";
+		box-shadow: inset 0 -1px 3px rgba(0, 0, 0, 0.8);
+	}
+
+	&::before {
+		content: "";
+		margin-left: -8px;
+		display: block;
+		width: @width;
+		height: @height;
+		border-radius: @radius;
+		box-shadow: inset 0 2px 4px hsla(0, 0%, 100%, 0.8);
+	}
+
+	&:active::before {
+		box-shadow: inset 0 -3px 6px hsla(0, 0%, 100%, 0.6);
+	}
+
+	&:active::after {
+		box-shadow: inset 0 5px 5px rgba(0, 0, 0, 0.6);
+	}
+}
+
+div .keypad {
+	font-size: 12px;
+	@btns-margin: 25px;
+
+	height: 100%;
+	display: grid;
+	grid-row-gap: 0px;
+	grid-column-gap: 0px;
+	grid-template-rows: repeat(8, 1fr);
+	grid-template-columns: repeat(5, 1fr);
+
+	.btns {
+		&.control {
+			margin-left: @btns-margin;
+			place-self: center;
+			grid-row-start: 1;
+			grid-row-end: 8;
+			grid-column-start: 1;
+			grid-column-end: 4;
+		}
+
+		&.shift {
+			margin-right: @btns-margin;
+			place-self: center;
+			grid-row-start: 1;
+			grid-row-end: 8;
+			grid-column-start: 4;
+			grid-column-end: 6;
+		}
+
+		&.setting {
+			margin-left: @btns-margin - 10px;
+			place-self: center start;
+			grid-row-start: 6;
+			grid-row-end: 9;
+			grid-column-start: 3;
+			grid-column-end: 6;
+		}
+	}
+}
+
+.btns {
+	&.control {
+		display: grid;
+		grid-row-gap: 0px;
+		grid-column-gap: 0px;
+		grid-template-rows: repeat(3, 50px);
+		grid-template-columns: repeat(3, 50px);
+
+		.up {
+			place-self: end center;
+			grid-row-start: 1;
+			grid-row-end: 2;
+			grid-column-start: 2;
+			grid-column-end: 3;
+		}
+
+		.left {
+			place-self: center end;
+			grid-row-start: 2;
+			grid-row-end: 3;
+			grid-column-start: 1;
+			grid-column-end: 2;
+		}
+
+		.icon {
+			place-self: stretch;
+			grid-row-start: 2;
+			grid-row-end: 3;
+			grid-column-start: 2;
+			grid-column-end: 3;
+
+			display: grid;
+			grid-row-gap: 0px;
+			grid-column-gap: 0px;
+			grid-template-rows: repeat(3, 1fr);
+			grid-template-columns: repeat(3, 1fr);
+
+			.t {
+				place-self: center;
+				grid-row-start: 1;
+				grid-row-end: 2;
+				grid-column-start: 2;
+				grid-column-end: 3;
+			}
+
+			.l {
+				place-self: center;
+				grid-row-start: 2;
+				grid-row-end: 3;
+				grid-column-start: 1;
+				grid-column-end: 2;
+			}
+
+			.r {
+				place-self: center;
+				grid-row-start: 2;
+				grid-row-end: 3;
+				grid-column-start: 3;
+				grid-column-end: 4;
+			}
+
+			.b {
+				place-self: center;
+				grid-row-start: 3;
+				grid-row-end: 4;
+				grid-column-start: 2;
+				grid-column-end: 3;
+			}
+		}
+
+		.right {
+			place-self: center start;
+			grid-row-start: 2;
+			grid-row-end: 3;
+			grid-column-start: 3;
+			grid-column-end: 4;
+		}
+
+		.down {
+			place-self: start center;
+			grid-row-start: 3;
+			grid-row-end: 4;
+			grid-column-start: 2;
+			grid-column-end: 3;
+		}
+	}
+
+	&.setting {
+		display: flex;
+		flex-direction: row;
+		& > div {
+			width: 45px;
+			flex-shrink: 5;
+			align-self: center;
+		}
+	}
+}
+
+button.btn {
+	cursor: pointer;
+	border: 1px solid #000;
+	border-radius: 50%;
+	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+
+	&.ctrl {
+		@length: 55px;
+		width: @length;
+		height: @length;
+		background-color: #629ff5;
+		.Pseudo(@length, @length);
+
+		span {
+			margin-top: -10px;
+		}
+	}
+
+	&.set {
+		@length: 27px;
+		width: @length;
+		height: @length;
+		background-color: #eb412a;
+		.Pseudo(@length, @length);
+	}
+
+	&.shift {
+		width: 45px;
+		height: 90px;
+		transform: rotate(-35deg);
+		border-radius: 30px;
+		background-color: #642aeb;
+		.Pseudo(45px, 90px, 30px);
+	}
+}

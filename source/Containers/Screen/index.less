@@ -1,0 +1,58 @@
+@import "../../Styles/variable.less";
+
+div .screen {
+	border: 1px solid #494536;
+	width: 280px;
+	height: auto;
+	padding: 5px;
+	margin: auto;
+	display: flex;
+	background: #9ead86;
+	justify-content: center;
+
+	.screen-map {
+		width: 192px;
+		height: 352px;
+		display: flex;
+		flex-wrap: wrap;
+
+		& .cell-map {
+			width: @min-cell;
+			height: @min-cell;
+			padding: @padding;
+			border: 1px solid #879372;
+			margin: 0 @margin @margin 0;
+
+			&::after {
+				content: "";
+				display: block;
+				width: @min-cell;
+				height: @min-cell;
+				background-color: #879372;
+			}
+		}
+
+		& .cell-block {
+			width: @min-cell;
+			height: @min-cell;
+			padding: @padding;
+			border: 1px solid #000000;
+			margin: 0 @margin @margin 0;
+
+			&::after {
+				content: "";
+				display: block;
+				width: @min-cell;
+				height: @min-cell;
+				background-color: #000000;
+			}
+		}
+	}
+
+	.screen-info {
+		min-width: 80px;
+		margin: 0 0 0 5px;
+		border: 1px solid #000000;
+		justify-self: self-end;
+	}
+}
