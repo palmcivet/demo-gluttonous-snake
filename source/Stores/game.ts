@@ -6,7 +6,7 @@ enum STATUS {
 	PAUSING,
 }
 
-enum GAME_TYPES {
+enum ACTION_TYPES {
 	START = "GAME/START",
 	PAUSE = "GAME/PAUSE",
 	OVER = "GAME/OVER",
@@ -14,59 +14,63 @@ enum GAME_TYPES {
 }
 
 interface Action {
-	type: GAME_TYPES;
+	type: ACTION_TYPES;
 	map?: [];
 }
 
 const initState = {
-	type: GAME_TYPES.OVER,
+	type: ACTION_TYPES.OVER,
 	status: STATUS.RESTING,
-	map: [],
+	game: null, // 当前的游戏
+	instance: null, // 游戏实例
+	mark: 0, // 游戏分数
+	timer: 0, // 返回的定时器
+	map: [], // 逻辑地图
 };
 
 const creator = {
 	update: (map) => ({
-		type: GAME_TYPES.UPDATE,
+		type: ACTION_TYPES.UPDATE,
 		map: map,
 	}),
 	startGame: (): Action => {
 		document.title = i18n.cn.title_play;
 		return {
-			type: GAME_TYPES.START,
+			type: ACTION_TYPES.START,
 		};
 	},
 	pauseGame: (): Action => {
 		document.title = i18n.cn.title_pause;
 		return {
-			type: GAME_TYPES.PAUSE,
+			type: ACTION_TYPES.PAUSE,
 		};
 	},
 	overGame: (): Action => {
 		document.title = i18n.cn.title_pause;
 		return {
-			type: GAME_TYPES.OVER,
+			type: ACTION_TYPES.OVER,
 		};
 	},
 };
 
 const reducer = (state = initState, action: Action) => {
 	switch (action.type) {
-		case GAME_TYPES.START:
+		case ACTION_TYPES.START:
 			return {
 				...state,
 				type: action.type,
 			};
-		case GAME_TYPES.PAUSE:
+		case ACTION_TYPES.PAUSE:
 			return {
 				...state,
 				type: action.type,
 			};
-		case GAME_TYPES.OVER:
+		case ACTION_TYPES.OVER:
 			return {
 				...state,
 				type: action.type,
 			};
-		case GAME_TYPES.OVER:
+		case ACTION_TYPES.OVER:
 			return {
 				...state,
 				type: action.type,

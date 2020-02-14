@@ -6,7 +6,7 @@
         "outDir": "./build/",
         "rootDir": ".",
         "target": "es5",
-        // "strict": true,
+        "strict": true,
         "sourceMap": true,
         "noImplicitAny": false,
         "removeComments": true,

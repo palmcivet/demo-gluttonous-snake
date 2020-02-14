@@ -3,9 +3,9 @@ import { dirOrien } from "../../Config/reference";
 import { randOrientation, randPosition } from "./utils";
 
 class Snake {
-	dir: dirOrien;
-	head: number[];
-	body: number[][] = [];
+	dir;
+	head;
+	body = [];
 
 	init = () => {
 		this.dir = randOrientation();
@@ -13,8 +13,8 @@ class Snake {
 		this.body[0] = this.head;
 	};
 
-	private next = (argHead = this.head) => {
-		let rtnNext: number[] = argHead;
+	next = (argHead = this.head) => {
+		let rtnNext = argHead;
 		rtnNext = Object.assign(rtnNext, argHead);
 
 		switch (this.dir) {
@@ -51,7 +51,7 @@ class Snake {
 		return rtnNext;
 	};
 
-	turn = (argChgDir: dirOrien) => {
+	turn = (argChgDir) => {
 		this.dir = argChgDir;
 	};
 

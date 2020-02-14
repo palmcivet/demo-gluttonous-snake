@@ -9,7 +9,7 @@ module.exports = {
 	entry: path.join(ENTRY, "index.tsx"),
 	output: {
 		filename: "index.js",
-		path: path.join(OUTPUT),
+		path: path.join(OUTPUT, "js"),
 	},
 	resolve: {
 		extensions: [".ts", ".tsx", ".js", ".jsx"],

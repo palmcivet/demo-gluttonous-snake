@@ -8,17 +8,11 @@ import { creator } from "../../Stores/game";
  * @class 描述一局游戏
  */
 class Game {
-	player: Snake;
-	isPlaying: boolean;
-	food: number;
-	mark: number;
-
 	constructor() {
 		this.player = new Snake();
 		this.isPlaying = false;
-		window.addEventListener("keydown", (e) => {
-			this.handleKeyboard(this.player, e.key);
-		});
+		this.food = 0;
+		this.mark = 0;
 	}
 
 	start = () => {
@@ -28,13 +22,13 @@ class Game {
 		this.cleanMap();
 		this.generateFood();
 		console.log("start", this.player.head);
-		// window.addEventListener("keydown", (e) =>
-		// 	this.handleKeyboard(this.player, e.key)
-		// );
+		window.addEventListener("keydown", (e) =>
+			this.handleKeyboard(this.player, e.key)
+		);
 		this.loop(MAP.SPD_SNAKE);
 	};
 
-	private gameOver = () => {
+	gameOver = () => {
 		this.isPlaying = false;
 		window.removeEventListener("keydown", (e) =>
 			this.handleKeyboard(this.player, e.key)
@@ -43,11 +37,11 @@ class Game {
 		// alert("Game Over");
 	};
 
-	private generateFood = () => {
+	generateFood = () => {
 		this.food = arr2num(randPosition(this.player.body));
 	};
 
-	private handleMove = (argSnake: Snake) => {
+	handleMove = (argSnake) => {
 		if (argSnake.head === [null, null]) {
 			this.gameOver();
 		} else if (argSnake.head == [0, 0]) {
@@ -67,7 +61,7 @@ class Game {
 		}
 	};
 
-	private handleKeyboard = (argSnake: Snake, argDir: string) => {
+	handleKeyboard = (argSnake, argDir) => {
 		if (argDir == "ArrowUp" || argDir == "w" || argDir == "W") {
 			argSnake.turn(dirOrien.U);
 		} else if (argDir == "ArrowDown" || argDir == "s" || argDir == "S") {
@@ -82,9 +76,9 @@ class Game {
 		}
 	};
 
-	private cleanMap = () => {};
+	cleanMap = () => {};
 
-	private refreshMap = () => {
+	refreshMap = () => {
 		let snakeMap = this.player.body.map((item) => arr2num(item));
 		console.table(snakeMap);
 
@@ -103,7 +97,7 @@ class Game {
 		}
 	};
 
-	private loop = (argTime: number) => {
+	loop = (argTime) => {
 		let startTime = new Date().getTime();
 		let restTime = 0;
 		if (this.isPlaying) {
