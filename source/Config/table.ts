@@ -1,4 +1,4 @@
-import { MAP } from "./config";
+import { MAP } from "../Components/Snake/config";
 
 const genTable = (argCell = "") => {
 	let rtnTable = new Array();

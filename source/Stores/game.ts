@@ -1,4 +1,4 @@
-import { i18n } from "../Config/reference";
+import { i18n, dirOrien } from "../Config/reference";
 
 enum STATUS {
 	RESTING,
@@ -13,39 +13,47 @@ enum ACTION_TYPES {
 	UPDATE = "GAME/UPDATE",
 }
 
-interface Action {
+interface IAction {
 	type: ACTION_TYPES;
 	map?: [];
 }
 
-const initState = {
+interface IState {
+	type: ACTION_TYPES.OVER;
+	status: STATUS.RESTING;
+	game: null; // 当前的游戏
+	mark: 0; // 游戏分数
+	map?: []; // 逻辑地图
+	dir?: dirOrien;
+}
+
+const initState: IState = {
 	type: ACTION_TYPES.OVER,
 	status: STATUS.RESTING,
-	game: null, // 当前的游戏
-	instance: null, // 游戏实例
-	mark: 0, // 游戏分数
-	timer: 0, // 返回的定时器
-	map: [], // 逻辑地图
+	game: null,
+	mark: 0,
+	map: [],
+	dir: dirOrien.D,
 };
 
 const creator = {
-	update: (map) => ({
+	update: (map: number[]) => ({
 		type: ACTION_TYPES.UPDATE,
 		map: map,
 	}),
-	startGame: (): Action => {
+	startGame: (): IAction => {
 		document.title = i18n.cn.title_play;
 		return {
 			type: ACTION_TYPES.START,
 		};
 	},
-	pauseGame: (): Action => {
+	pauseGame: (): IAction => {
 		document.title = i18n.cn.title_pause;
 		return {
 			type: ACTION_TYPES.PAUSE,
 		};
 	},
-	overGame: (): Action => {
+	overGame: (): IAction => {
 		document.title = i18n.cn.title_pause;
 		return {
 			type: ACTION_TYPES.OVER,
@@ -53,7 +61,7 @@ const creator = {
 	},
 };
 
-const reducer = (state = initState, action: Action) => {
+const reducer = (state = initState, action: IAction) => {
 	switch (action.type) {
 		case ACTION_TYPES.START:
 			return {

@@ -8,7 +8,7 @@
         "target": "es5",
         "strict": true,
         "sourceMap": true,
-        "noImplicitAny": false,
+        "noImplicitAny": true,
         "removeComments": true,
         "moduleResolution": "node",
         "preserveConstEnums": true,

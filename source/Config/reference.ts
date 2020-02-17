@@ -18,6 +18,18 @@ enum dirKey {
 	D,
 }
 
+enum mapView {
+	block,
+	empty,
+	twinkle,
+}
+
+enum mapStyle {
+	block = "cell-block",
+	empty = "cell-map",
+	twinkle = "cell-twinkle",
+}
+
 const i18n = {
 	cn: {
 		title_raw: "贪吃蛇",
@@ -31,4 +43,4 @@ const i18n = {
 	},
 };
 
-export { dirOrien, dirKey, i18n };
+export { dirOrien, dirKey, mapView, mapStyle, i18n };

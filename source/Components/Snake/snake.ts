@@ -1,21 +1,20 @@
 import { MAP } from "./config";
 import { dirOrien } from "../../Config/reference";
-import { randOrientation, randPosition } from "./utils";
+import { randOrientation, randPosition, num2arr, arr2num } from "./utils";
 
 class Snake {
-	dir;
-	head;
-	body = [];
+	dir: dirOrien = randOrientation();
+	head: number = randPosition();
+	body: number[] = [];
 
 	init = () => {
 		this.dir = randOrientation();
 		this.head = randPosition();
-		this.body[0] = this.head;
+		this.body.push(this.head);
 	};
 
 	next = (argHead = this.head) => {
-		let rtnNext = argHead;
-		rtnNext = Object.assign(rtnNext, argHead);
+		let rtnNext = num2arr(argHead);
 
 		switch (this.dir) {
 			case dirOrien.U:
@@ -45,20 +44,16 @@ class Snake {
 				rtnNext[0] >= MAP.BG_LINE ||
 				rtnNext[1] >= MAP.BG_CELL
 			) {
-				return [null, null];
+				return -1;
 			}
 		}
-		return rtnNext;
-	};
-
-	turn = (argChgDir) => {
-		this.dir = argChgDir;
+		return arr2num(rtnNext);
 	};
 
 	move = () => {
 		this.head = this.next(this.head);
 		this.body.reverse();
-		this.body.push(this.head.slice(0));
+		this.body.push(this.head);
 		this.body.reverse();
 		return this.body.pop();
 	};
@@ -66,7 +61,7 @@ class Snake {
 	catch = () => {
 		this.head = this.next(this.head);
 		this.body.reverse();
-		this.body.push(this.head.slice(0));
+		this.body.push(this.head);
 		this.body.reverse();
 		return this.head;
 	};

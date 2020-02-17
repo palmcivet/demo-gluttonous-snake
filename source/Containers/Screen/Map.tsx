@@ -1,26 +1,29 @@
-import React, { Fragment } from "react";
+import React from "react";
 
-import { genTable } from "../../Components/Snake/table";
-import { MAP } from "../../Components/Snake/config";
+import { mapView, mapStyle } from "../../Config/reference";
 
-let mapTable = genTable();
-let id = 0;
+interface IProps {
+	table: number[];
+}
 
-const Map = (props) => {
+const Map = (props: IProps) => {
 	return (
 		<div className="screen-map">
-			{mapTable.map((items, line) => (
-				<Fragment key={line}>
-					{items.map((item, cell) => (
-						<div
-							className="cell-map"
-							key={cell}
-							id={(id++).toString()}
-							style={{ backgroundColor: MAP.BG_STYLE }}
-						></div>
-					))}
-				</Fragment>
-			))}
+			{props.table.map((items, index) => {
+				let style = mapStyle.empty;
+				switch (items) {
+					case mapView.empty:
+						style = mapStyle.empty;
+						break;
+					case mapView.block:
+						style = mapStyle.block;
+						break;
+					case mapView.twinkle:
+						style = mapStyle.twinkle;
+						break;
+				}
+				return <div className={style} key={index}></div>;
+			})}
 		</div>
 	);
 };
