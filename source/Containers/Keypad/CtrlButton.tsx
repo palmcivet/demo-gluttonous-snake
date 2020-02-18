@@ -1,13 +1,5 @@
 import React, { Component } from "react";
 
-const CtrlButtonView = (props) => {
-	return (
-		<button className="btn ctrl">
-			<span className={props.className}></span>
-		</button>
-	);
-};
-
 const Indicator = () => (
 	<>
 		<div className="t">
@@ -25,15 +17,15 @@ const Indicator = () => (
 	</>
 );
 
-const CtrlButton = (props) => {
+const CtrlButton = (props: { callback: Function }) => {
 	return (
 		<div className="btns control">
 			<div className="up">
-				<button className="btn ctrl"></button>
+				<button className="btn ctrl" onClick={() => props.callback("W")}></button>
 			</div>
 
 			<div className="left">
-				<button className="btn ctrl"></button>
+				<button className="btn ctrl" onClick={() => props.callback("A")}></button>
 			</div>
 
 			<div className="icon">
@@ -41,11 +33,11 @@ const CtrlButton = (props) => {
 			</div>
 
 			<div className="right">
-				<button className="btn ctrl"></button>
+				<button className="btn ctrl" onClick={() => props.callback("D")}></button>
 			</div>
 
 			<div className="down">
-				<button className="btn ctrl"></button>
+				<button className="btn ctrl" onClick={() => props.callback("S")}></button>
 			</div>
 		</div>
 	);

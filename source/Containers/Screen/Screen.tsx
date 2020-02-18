@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { Map } from "./Map";
 import { Info } from "./Info";
 import "./index.less";
+import { GreedySnake } from "../../Components/Snake/GreedySnake";
 
 const Screen = () => {
 	return (
 		<div className="screen">
-			<Map />
+			<GreedySnake />
 			<Info />
 		</div>
 	);

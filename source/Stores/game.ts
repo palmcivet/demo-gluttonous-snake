@@ -6,41 +6,39 @@ enum STATUS {
 	PAUSING,
 }
 
+enum GAME {
+	GREEDYSNAKE,
+	TETRIS,
+}
+
 enum ACTION_TYPES {
+	OVER = "GAME/OVER",
 	START = "GAME/START",
 	PAUSE = "GAME/PAUSE",
-	OVER = "GAME/OVER",
-	UPDATE = "GAME/UPDATE",
+	MUSIC = "GAME/MUSIC",
+	CHANGE = "GAME/CHANGE",
 }
 
 interface IAction {
 	type: ACTION_TYPES;
-	map?: [];
+	game?: GAME; // 当前的游戏
 }
 
 interface IState {
-	type: ACTION_TYPES.OVER;
-	status: STATUS.RESTING;
-	game: null; // 当前的游戏
-	mark: 0; // 游戏分数
-	map?: []; // 逻辑地图
-	dir?: dirOrien;
+	type: ACTION_TYPES;
+	status: STATUS;
+	music: boolean;
+	game: null;
 }
 
 const initState: IState = {
 	type: ACTION_TYPES.OVER,
 	status: STATUS.RESTING,
+	music: true,
 	game: null,
-	mark: 0,
-	map: [],
-	dir: dirOrien.D,
 };
 
 const creator = {
-	update: (map: number[]) => ({
-		type: ACTION_TYPES.UPDATE,
-		map: map,
-	}),
 	startGame: (): IAction => {
 		document.title = i18n.cn.title_play;
 		return {
@@ -59,6 +57,17 @@ const creator = {
 			type: ACTION_TYPES.OVER,
 		};
 	},
+	changeGame: (argGame: GAME): IAction => {
+		return {
+			type: ACTION_TYPES.CHANGE,
+			game: argGame,
+		};
+	},
+	toogleMusic: (): IAction => {
+		return {
+			type: ACTION_TYPES.MUSIC,
+		};
+	},
 };
 
 const reducer = (state = initState, action: IAction) => {
@@ -66,27 +75,38 @@ const reducer = (state = initState, action: IAction) => {
 		case ACTION_TYPES.START:
 			return {
 				...state,
-				type: action.type,
+				status: STATUS.PLAYING,
 			};
 		case ACTION_TYPES.PAUSE:
-			return {
-				...state,
-				type: action.type,
-			};
+			if (state.status === STATUS.PAUSING) {
+				return {
+					...state,
+					status: STATUS.PLAYING,
+				};
+			} else {
+				return {
+					...state,
+					status: STATUS.PAUSING,
+				};
+			}
 		case ACTION_TYPES.OVER:
 			return {
 				...state,
-				type: action.type,
+				status: STATUS.RESTING,
 			};
-		case ACTION_TYPES.OVER:
+		case ACTION_TYPES.CHANGE:
 			return {
 				...state,
-				type: action.type,
-				map: action.map,
+				game: action.game,
+			};
+		case ACTION_TYPES.MUSIC:
+			return {
+				...state,
+				music: !state.music,
 			};
 		default:
 			return state;
 	}
 };
 
-export { creator, reducer };
+export { STATUS, creator, reducer };

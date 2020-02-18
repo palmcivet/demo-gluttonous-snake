@@ -1,8 +1,8 @@
-import React, { Component } from "react";
+import React from "react";
 
-const ShiftButton = (props: Function) => (
+const ShiftButton = (props: { callback: Function }) => (
 	<div className="btns shift">
-		<button className="btn shift"></button>
+		<button className="btn shift" onClick={() => props.callback}></button>
 		<div>Space</div>
 	</div>
 );

@@ -2,18 +2,18 @@ import React, { Component } from "react";
 
 import { MAP } from "./config";
 import { creator } from "../../Stores/game";
-import { arr2num, num2arr, randPosition, randOrientation } from "./utils";
 import { Map } from "../../Containers/Screen/Map";
-import { dirOrien, mapStyle } from "../../Config/reference";
+import { dirOrien, mapView } from "../../Config/reference";
+import { arr2num, num2arr, randPosition, randOrientation } from "./utils";
 
 interface IProps {
-	dir: dirOrien;
+	dir?: number;
 	mark?: number;
-	isPlaying: boolean;
+	isPlaying?: boolean;
 }
 
 interface IState {
-	dir: dirOrien;
+	dir: number;
 	food: number;
 	head: number;
 	body: number[];
@@ -23,11 +23,16 @@ interface IState {
 class GreedySnake extends Component<IProps, IState> {
 	constructor(props: IProps) {
 		super(props);
+
+		let tDir = randOrientation();
+		let tFood = randPosition();
+		let tHead = randPosition();
+
 		this.state = {
-			dir: randOrientation(),
-			food: randPosition(),
-			head: randPosition(),
-			body: [this.state.head],
+			dir: tDir,
+			food: tFood,
+			head: tHead,
+			body: [tHead],
 			isPlaying: false,
 		};
 	}
@@ -144,15 +149,14 @@ class GreedySnake extends Component<IProps, IState> {
 	}
 
 	render() {
-		let map: mapStyle[] = [];
-		map[MAP.BG_CELL * MAP.BG_LINE] = mapStyle.empty;
-		map.fill(mapStyle.empty);
-
+		let map: Array<number> = [];
+		map[MAP.BG_CELL * MAP.BG_LINE] = mapView.empty;
+		map.fill(mapView.empty);
 		for (let index = 0; index < this.state.body.length; index++) {
-			map[this.state.body[index]] = mapStyle.block;
+			map[this.state.body[index]] = mapView.block;
 		}
-		map[this.state.food] = mapStyle.twinkle;
-		return <Map table={this.state.body} />;
+		map[this.state.food] = mapView.twinkle;
+		return <Map table={map} />;
 	}
 }
 

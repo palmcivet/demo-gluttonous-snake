@@ -1,39 +1,32 @@
-import React, { Component } from "react";
+import React from "react";
 
-const SetButtonView = (props) => {
-	return (
-		<button className="btn set">
-			<span className={props.className}></span>
-		</button>
-	);
-};
+interface IProps {
+	start: Function;
+	pause: Function;
+	restart: Function;
+	music: Function;
+}
 
-const SetButton = (props) => {
+const SetButton = (props: IProps) => {
 	return (
 		<div className="btns setting">
 			<div>
-				<button className="btn set" onClick={() => this.handleStart()}></button>
+				<button className="btn set" onClick={() => props.start()}></button>
 				<div>Start</div>
 			</div>
 
 			<div>
-				<button className="btn set" onClick={() => this.props.pauseGame}></button>
+				<button className="btn set" onClick={() => props.pause()}></button>
 				<div>Pause</div>
 			</div>
 
 			<div>
-				<button
-					className="btn set"
-					onClick={() => console.log("sdfsdf")}
-				></button>
+				<button className="btn set" onClick={() => props.restart()}></button>
 				<div>Restart</div>
 			</div>
 
 			<div>
-				<button
-					className="btn set"
-					onClick={() => console.log("sdfsdf")}
-				></button>
+				<button className="btn set" onClick={() => props.music()}></button>
 				<div>Music</div>
 			</div>
 		</div>

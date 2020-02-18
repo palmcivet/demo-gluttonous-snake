@@ -1,38 +1,58 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { dirOrien } from "../../Config/reference";
+import { bindActionCreators, Dispatch } from "redux";
 
-import { creator as gameCreator } from "../../Stores/game";
+import { creator as gameCreator, STATUS } from "../../Stores/game";
+import { creator as controlCreator } from "../../Stores/control";
+import { dirOrien } from "../../Config/reference";
 import { ShiftButton } from "./ShiftButton";
 import { CtrlButton } from "./CtrlButton";
 import { SetButton } from "./SetButton";
 import "./index.less";
 
 interface IProps {
-	dir: dirOrien;
-	mark?: number;
-	isPlaying: boolean;
+	isPausing: STATUS;
+	changeDir: Function;
+	shift: Function;
+	startGame: Function;
+	pauseGame: Function;
+	toogleMusic: Function;
 }
 
-class KeypadView extends Component {
+class KeypadView extends Component<IProps> {
 	constructor(props: IProps) {
 		super(props);
 	}
 
 	handleStart() {
-		//dispatch
+		this.props.startGame();
 	}
 
-	handleKeyboard = (argDir) => {
+	handlePause() {
+		if (this.props.isPausing === STATUS.PAUSING) {
+			this.props.pauseGame();
+		}
+	}
+
+	handleRestart() {
+		// TODO
+		this.props.startGame();
+	}
+
+	handleMusic() {
+		// TODO
+		this.props.toogleMusic();
+	}
+
+	handleKeyboard = (argDir: string) => {
 		if (argDir == "ArrowUp" || argDir == "w" || argDir == "W") {
-			argSnake.turn(dirOrien.U);
+			this.props.changeDir(dirOrien.U);
 		} else if (argDir == "ArrowDown" || argDir == "s" || argDir == "S") {
-			argSnake.turn(dirOrien.D);
+			this.props.changeDir(dirOrien.D);
 		} else if (argDir == "ArrowLeft" || argDir == "a" || argDir == "A") {
-			argSnake.turn(dirOrien.L);
+			this.props.changeDir(dirOrien.L);
 		} else if (argDir == "ArrowRight" || argDir == "d" || argDir == "D") {
-			argSnake.turn(dirOrien.R);
+			this.props.changeDir(dirOrien.R);
 		} else {
 			// TODO
 			console.log("使用 上下左右键或 WASD");
@@ -40,33 +60,41 @@ class KeypadView extends Component {
 	};
 
 	componentDidMount() {
-		window.addEventListener("keydown", (e) =>
-			this.handleKeyboard(this.player, e.key)
-		);
+		window.addEventListener("keydown", (e) => this.handleKeyboard(e.key));
 	}
+
 	componentWillUnmount() {
-		window.removeEventListener("keydown", (e) =>
-			this.handleKeyboard(this.player, e.key)
-		);
+		window.removeEventListener("keydown", (e) => this.handleKeyboard(e.key));
 	}
 
 	render() {
 		return (
 			<div className="keypad">
-				<CtrlButton />
-				<ShiftButton />
-				<SetButton />
+				<CtrlButton callback={this.handleKeyboard} />
+				<ShiftButton callback={this.props.shift} />
+				<SetButton
+					start={this.handleStart}
+					pause={this.handlePause}
+					restart={this.handleRestart}
+					music={this.handleMusic}
+				/>
 			</div>
 		);
 	}
 }
 
-const mapStateToProps = (state, props) => {
-	return {};
+const mapStateToProps = (state: any, props: IProps) => {
+	console.log(state);
+	console.log(props);
+
+	return {
+		isPausing: state.game.status,
+	};
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
 	return {
+		...bindActionCreators(controlCreator, dispatch),
 		...bindActionCreators(gameCreator, dispatch),
 	};
 };
