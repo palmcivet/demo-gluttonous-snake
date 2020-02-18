@@ -32,7 +32,7 @@ interface IState {
 }
 
 const initState: IState = {
-	type: ACTION_TYPES.OVER,
+	type: null,
 	status: STATUS.RESTING,
 	music: true,
 	game: null,
@@ -40,19 +40,16 @@ const initState: IState = {
 
 const creator = {
 	startGame: (): IAction => {
-		document.title = i18n.cn.title_play;
 		return {
 			type: ACTION_TYPES.START,
 		};
 	},
 	pauseGame: (): IAction => {
-		document.title = i18n.cn.title_pause;
 		return {
 			type: ACTION_TYPES.PAUSE,
 		};
 	},
 	overGame: (): IAction => {
-		document.title = i18n.cn.title_pause;
 		return {
 			type: ACTION_TYPES.OVER,
 		};
@@ -73,23 +70,27 @@ const creator = {
 const reducer = (state = initState, action: IAction) => {
 	switch (action.type) {
 		case ACTION_TYPES.START:
+			document.title = i18n.cn.title_play;
 			return {
 				...state,
 				status: STATUS.PLAYING,
 			};
 		case ACTION_TYPES.PAUSE:
 			if (state.status === STATUS.PAUSING) {
+				document.title = i18n.cn.title_play;
 				return {
 					...state,
 					status: STATUS.PLAYING,
 				};
-			} else {
+			} else if (state.status === STATUS.PLAYING) {
+				document.title = i18n.cn.title_pause;
 				return {
 					...state,
 					status: STATUS.PAUSING,
 				};
 			}
 		case ACTION_TYPES.OVER:
+			document.title = i18n.cn.title_raw;
 			return {
 				...state,
 				status: STATUS.RESTING,

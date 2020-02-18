@@ -1,60 +1,63 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators, Dispatch, AnyAction } from "redux";
 
-import { MAP } from "./config";
-import { creator } from "../../Stores/game";
-import { Map } from "../../Containers/Screen/Map";
+import { creator as gameCreator, STATUS } from "../../Stores/game";
+import { creator as controlCreator } from "../../Stores/control";
 import { dirOrien, mapView } from "../../Config/reference";
-import { arr2num, num2arr, randPosition, randOrientation } from "./utils";
+import { arr2num, num2arr, randPosition } from "./utils";
+import { Map } from "../../Containers/Screen/Map";
+import { RootState } from "../../Stores";
+import { MAP } from "./config";
 
 interface IProps {
-	dir?: number;
-	mark?: number;
-	isPlaying?: boolean;
+	dir: number;
+	status: STATUS;
+	overGame: any;
+	getScore: any;
+	initScore: any;
 }
 
 interface IState {
-	dir: number;
 	food: number;
 	head: number;
 	body: number[];
-	isPlaying: boolean;
 }
 
-class GreedySnake extends Component<IProps, IState> {
+class Snake extends Component<IProps, IState> {
+	isPlaying: boolean = false;
+
 	constructor(props: IProps) {
 		super(props);
 
-		let tDir = randOrientation();
-		let tFood = randPosition();
-		let tHead = randPosition();
-
 		this.state = {
-			dir: tDir,
-			food: tFood,
-			head: tHead,
-			body: [tHead],
-			isPlaying: false,
+			food: null,
+			head: null,
+			body: [],
 		};
 	}
 
 	start = () => {
-		// dispatch
-		this.setState({
-			dir: randOrientation(),
-			head: randPosition(),
-			food: randPosition(this.state.body),
-			body: [this.state.head],
-			isPlaying: true,
-		});
-
 		// clean map
-		console.log("start");
-		this.loop(MAP.SPD_SNAKE);
+		let tHead = randPosition();
+		let tFood = randPosition([tHead]);
+		this.setState(
+			{
+				head: tHead,
+				food: tFood,
+				body: [tHead],
+			},
+			() => {
+				this.props.initScore();
+				this.isPlaying = true;
+				this.loop(MAP.SPD_SNAKE);
+			}
+		);
 	};
 
-	private next = (argHead = this.state.head) => {
+	next = (argHead = this.state.head) => {
 		let rtnNext = num2arr(argHead);
-		switch (this.state.dir) {
+		switch (this.props.dir) {
 			case dirOrien.U:
 				rtnNext[0] = rtnNext[0] - 1;
 				break;
@@ -70,72 +73,58 @@ class GreedySnake extends Component<IProps, IState> {
 		}
 
 		// 边界检测，失败返回 "ERROR"，成功返回坐标数组
-		if (!MAP.BOUNDARY) {
-			// 循环边界
-			rtnNext[0] = (MAP.BG_LINE + rtnNext[0]) % MAP.BG_LINE;
-			rtnNext[1] = (MAP.BG_CELL + rtnNext[1]) % MAP.BG_CELL;
-		} else {
-			// 固定边界
-			if (
-				rtnNext[0] < 0 ||
-				rtnNext[1] < 0 ||
-				rtnNext[0] >= MAP.BG_LINE ||
-				rtnNext[1] >= MAP.BG_CELL
-			) {
+		if (
+			rtnNext[0] < 0 ||
+			rtnNext[1] < 0 ||
+			rtnNext[0] >= MAP.BG_LINE ||
+			rtnNext[1] >= MAP.BG_CELL
+		) {
+			if (!MAP.BOUNDARY) {
+				// 循环边界
+				rtnNext[0] = (MAP.BG_LINE + rtnNext[0]) % MAP.BG_LINE;
+				rtnNext[1] = (MAP.BG_CELL + rtnNext[1]) % MAP.BG_CELL;
+			} else {
+				// 固定边界
 				return -1;
 			}
 		}
 		return arr2num(rtnNext);
 	};
 
-	private move = () => {
-		this.setState({
-			head: this.next(this.state.head),
-		});
-		this.state.body.reverse();
-		this.state.body.push(this.state.head);
-		this.state.body.reverse();
-		return this.state.body.pop();
-	};
+	handleMove = () => {
+		let tHead = this.next(this.state.head);
 
-	private catch = () => {
-		this.setState({
-			head: this.next(this.state.head),
-		});
-		this.state.body.reverse();
-		this.state.body.push(this.state.head);
-		this.state.body.reverse();
-		return this.state.head;
-	};
-
-	private handleDie = () => {
-		this.setState({
-			isPlaying: false,
-		});
-		console.info("Game Over.");
-	};
-
-	private handleMove = () => {
-		if (this.state.head === -1) {
-			this.handleDie();
-		} else if (this.state.head == 0) {
-			this.move();
-		} else if (this.state.head === this.state.food) {
+		if (tHead in this.state.body || tHead === -1) {
+			console.log("Game Over.");
+			this.isPlaying = false;
+			this.props.overGame();
+		} else if (tHead === this.state.food) {
 			// 有食物
-			this.catch();
 			this.setState({
+				head: tHead,
 				food: randPosition(this.state.body),
 			});
+			this.state.body.reverse();
+			this.state.body.push(tHead);
+			this.state.body.reverse();
+			this.props.getScore();
 		} else {
 			// 无食物
-			this.move();
+			this.setState({
+				head: tHead,
+			});
+			this.state.body.reverse();
+			this.state.body.push(tHead);
+			this.state.body.reverse();
+			this.state.body.pop();
 		}
 	};
 
-	private loop = (argTime: number) => {
+	loop = (argTime: number) => {
 		let startTime = new Date().getTime();
 		let restTime = 0;
-		if (this.state.isPlaying) {
+
+		if (this.isPlaying) {
 			this.handleMove();
 			restTime = argTime + startTime - new Date().getTime();
 			setTimeout(() => this.loop(argTime), restTime);
@@ -143,14 +132,25 @@ class GreedySnake extends Component<IProps, IState> {
 	};
 
 	componentDidUpdate(prevProps: IProps) {
-		if (!prevProps.isPlaying && this.state.isPlaying) {
-			this.loop(MAP.SPD_REFRESH);
+		if (prevProps.status === STATUS.RESTING && this.props.status === STATUS.PLAYING) {
+			this.start();
+		} else if (
+			prevProps.status === STATUS.PLAYING &&
+			this.props.status === STATUS.PAUSING
+		) {
+			this.isPlaying = false;
+		} else if (
+			prevProps.status === STATUS.PAUSING &&
+			this.props.status === STATUS.PLAYING
+		) {
+			this.isPlaying = true;
+			this.loop(MAP.SPD_SNAKE);
 		}
 	}
 
 	render() {
 		let map: Array<number> = [];
-		map[MAP.BG_CELL * MAP.BG_LINE] = mapView.empty;
+		map[MAP.BG_CELL * MAP.BG_LINE - 1] = mapView.empty;
 		map.fill(mapView.empty);
 		for (let index = 0; index < this.state.body.length; index++) {
 			map[this.state.body[index]] = mapView.block;
@@ -159,5 +159,21 @@ class GreedySnake extends Component<IProps, IState> {
 		return <Map table={map} />;
 	}
 }
+
+const mapStateToProps = (state: RootState) => {
+	return {
+		dir: state.control.dir,
+		status: state.game.status,
+	};
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
+	return {
+		...bindActionCreators(gameCreator, dispatch),
+		...bindActionCreators(controlCreator, dispatch),
+	};
+};
+
+const GreedySnake = connect(mapStateToProps, mapDispatchToProps)(Snake);
 
 export { GreedySnake };

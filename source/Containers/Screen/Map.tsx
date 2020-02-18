@@ -5,24 +5,18 @@ import { mapView, mapStyle } from "../../Config/reference";
 interface IProps {
 	table: number[];
 }
-
 const Map = (props: IProps) => {
 	return (
 		<div className="screen-map">
 			{props.table.map((items, index) => {
 				let style = mapStyle.empty;
-				switch (items) {
-					case mapView.empty:
-						style = mapStyle.empty;
-						break;
-					case mapView.block:
-						style = mapStyle.block;
-						break;
-					case mapView.twinkle:
-						style = mapStyle.twinkle;
-						break;
+				if (items === mapView.block) {
+					style = mapStyle.block;
+				} else if (items === mapView.twinkle) {
+					// style = mapStyle.twinkle;
+					style = mapStyle.block;
 				}
-				return <div className={style} key={index}></div>;
+				return <div className={style} key={index} id={index.toString()}></div>;
 			})}
 		</div>
 	);

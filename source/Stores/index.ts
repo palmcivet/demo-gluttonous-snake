@@ -7,4 +7,6 @@ const rootReducers = combineReducers({
 	control: controlReducer,
 });
 
-export { rootReducers };
+type RootState = ReturnType<typeof rootReducers>;
+
+export { rootReducers, RootState };
