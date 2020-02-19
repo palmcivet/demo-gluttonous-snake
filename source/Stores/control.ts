@@ -54,7 +54,7 @@ const reducer = (state = initState, action: IAction) => {
 		case ACTION_TYPES.GET_SCORE:
 			return {
 				...state,
-				score: state.score++,
+				score: state.score + 1,
 			};
 		case ACTION_TYPES.INIT_SCORE:
 			return {

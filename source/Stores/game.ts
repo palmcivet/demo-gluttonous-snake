@@ -91,6 +91,7 @@ const reducer = (state = initState, action: IAction) => {
 			}
 		case ACTION_TYPES.OVER:
 			document.title = i18n.cn.title_raw;
+			console.log("Over");
 			return {
 				...state,
 				status: STATUS.RESTING,
