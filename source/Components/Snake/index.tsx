@@ -5,7 +5,7 @@ import { bindActionCreators, Dispatch, AnyAction } from "redux";
 import { creator as gameCreator, STATUS } from "../../Stores/game";
 import { creator as controlCreator } from "../../Stores/control";
 import { dirOrien, mapView } from "../../Config/reference";
-import { arr2num, num2arr, randPosition, sleep } from "./utils";
+import { arr2num, num2arr, randPosition } from "./utils";
 import { Map } from "../../Containers/Screen/Map";
 import { MAP, SNAKE } from "../../Config/config";
 import { RootState } from "../../Stores";
@@ -56,9 +56,12 @@ class SnakeView extends Component<IProps, IState> {
 	};
 
 	finish = () => {
-		this.isPlaying = false;
 		this.props.overGame();
 		this.upRefresh();
+		this.food = null;
+		this.head = null;
+		this.tail = null;
+		this.isPlaying = false;
 		setTimeout(this.downRefresh, MAP.BG_LINE * MAP.SPD_REFRESH);
 	};
 
@@ -72,8 +75,7 @@ class SnakeView extends Component<IProps, IState> {
 					.map((k, j) => {
 						map.push(j + (MAP.BG_LINE - i - 1) * MAP.BG_CELL);
 					});
-				this.setState({ body: map });
-				this.forceUpdate();
+				this.setState({ body: map }, this.forceUpdate);
 			},
 			0,
 			MAP.BG_LINE,
@@ -90,8 +92,7 @@ class SnakeView extends Component<IProps, IState> {
 					.map((k, j) => {
 						map.push(j + (i + 1) * MAP.BG_CELL);
 					});
-				this.setState({ body: map });
-				this.forceUpdate();
+				this.setState({ body: map }, this.forceUpdate);
 			},
 			0,
 			MAP.BG_LINE,
