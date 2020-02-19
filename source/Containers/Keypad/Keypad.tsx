@@ -53,6 +53,8 @@ class KeypadView extends Component<IProps> {
 			this.props.changeDir(dirOrien.L);
 		} else if (argDir == "ArrowRight" || argDir == "d" || argDir == "D") {
 			this.props.changeDir(dirOrien.R);
+		} else if (argDir == "Enter") {
+			this.handleStart();
 		} else {
 			// TODO
 			console.log("使用 上下左右键或 WASD");

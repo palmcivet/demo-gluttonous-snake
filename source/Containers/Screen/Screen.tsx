@@ -1,12 +1,12 @@
-import React, { Component } from "react";
+import React from "react";
 import { Info } from "./Info";
 import "./index.less";
-import { GreedySnake } from "../../Components/Snake/GreedySnake";
+import { Snake } from "../../Components/Snake/index";
 
 const Screen = () => {
 	return (
 		<div className="screen">
-			<GreedySnake />
+			<Snake />
 			<Info />
 		</div>
 	);

@@ -5,10 +5,10 @@ import { bindActionCreators, Dispatch, AnyAction } from "redux";
 import { creator as gameCreator, STATUS } from "../../Stores/game";
 import { creator as controlCreator } from "../../Stores/control";
 import { dirOrien, mapView } from "../../Config/reference";
-import { arr2num, num2arr, randPosition } from "./utils";
+import { arr2num, num2arr, randPosition, sleep } from "./utils";
 import { Map } from "../../Containers/Screen/Map";
+import { MAP, SNAKE } from "../../Config/config";
 import { RootState } from "../../Stores";
-import { MAP } from "./config";
 
 interface IProps {
 	dir: number;
@@ -23,12 +23,12 @@ interface IState {
 	body: number[];
 }
 
-class Snake extends Component<IProps, IState> {
+class SnakeView extends Component<IProps, IState> {
 	food: number = null;
 	head: number = null;
 	tail: number = null;
-	axis: boolean = false;
-	isPlaying: boolean = false;
+	axis = false;
+	isPlaying = false;
 
 	constructor(props: IProps) {
 		super(props);
@@ -38,7 +38,6 @@ class Snake extends Component<IProps, IState> {
 	}
 
 	start = () => {
-		// clean map
 		this.food = randPosition([this.head]);
 		this.head = randPosition();
 		this.tail = this.head;
@@ -51,14 +50,76 @@ class Snake extends Component<IProps, IState> {
 			() => {
 				this.props.initScore();
 				this.isPlaying = true;
-				this.loop(MAP.SPD_SNAKE);
+				this.loop(SNAKE.SPD_SNAKE);
 			}
 		);
 	};
 
-	next = (argHead = this.head) => {
+	finish = () => {
+		this.isPlaying = false;
+		this.props.overGame();
+		this.upRefresh();
+		setTimeout(this.downRefresh, MAP.BG_LINE * MAP.SPD_REFRESH);
+	};
+
+	upRefresh = () =>
+		this.sleep(
+			MAP.SPD_REFRESH,
+			(i) => {
+				let map = [];
+				Array((i + 1) * MAP.BG_CELL)
+					.fill(1)
+					.map((k, j) => {
+						map.push(j + (MAP.BG_LINE - i - 1) * MAP.BG_CELL);
+					});
+				this.setState({ body: map });
+				this.forceUpdate();
+			},
+			0,
+			MAP.BG_LINE,
+			1
+		);
+
+	downRefresh = () => {
+		this.sleep(
+			MAP.SPD_REFRESH,
+			(i) => {
+				let map = [];
+				Array((MAP.BG_LINE - i - 1) * MAP.BG_CELL)
+					.fill(1)
+					.map((k, j) => {
+						map.push(j + (i + 1) * MAP.BG_CELL);
+					});
+				this.setState({ body: map });
+				this.forceUpdate();
+			},
+			0,
+			MAP.BG_LINE,
+			1
+		);
+	};
+
+	sleep = (
+		argTime: number,
+		callback: (i: number) => void,
+		argStart: number,
+		argEnd: number,
+		argStep: number
+	) => {
+		let startTime = new Date().getTime();
+		if (argStart < argEnd) {
+			callback(argStart);
+			let restTime = argTime + startTime - new Date().getTime();
+			setTimeout(
+				() => this.sleep(argTime, callback, argStart + argStep, argEnd, argStep),
+				restTime
+			);
+		}
+	};
+
+	next = (argHead = this.head, argDir = this.props.dir) => {
 		let rtnNext = num2arr(argHead);
-		switch (this.props.dir) {
+		switch (argDir) {
 			case dirOrien.U:
 				rtnNext[0] = rtnNext[0] - 1;
 				break;
@@ -79,7 +140,7 @@ class Snake extends Component<IProps, IState> {
 			rtnNext[0] >= MAP.BG_LINE ||
 			rtnNext[1] >= MAP.BG_CELL
 		) {
-			if (!MAP.IS_BOUNDARY) {
+			if (!SNAKE.IS_BOUNDARY) {
 				// 循环边界
 				rtnNext[0] = (MAP.BG_LINE + rtnNext[0]) % MAP.BG_LINE;
 				rtnNext[1] = (MAP.BG_CELL + rtnNext[1]) % MAP.BG_CELL;
@@ -93,38 +154,35 @@ class Snake extends Component<IProps, IState> {
 
 	handleMove = () => {
 		if (this.axis) {
-			let tHead = this.head;
 			let tTail = this.tail;
+			let tHead = this.head;
 			this.state.body.reverse();
 			this.head = tTail;
 			this.tail = tHead;
 			this.axis = !this.axis;
-		}
-
-		let tHead = this.next(this.head);
-		if (this.head === -1) {
-			this.isPlaying = false;
-			this.props.overGame();
-		} else if (!MAP.IS_SELF && this.state.body.indexOf(this.head) !== -1) {
-			this.isPlaying = false;
-			this.props.overGame();
-			console.log(this.head, this.state.body);
-		} else if (this.head === this.food) {
-			// 有食物
-			this.state.body.reverse();
-			this.state.body.push(this.head);
-			this.state.body.reverse();
-			this.props.getScore();
-			this.head = tHead;
-			this.food = randPosition(this.state.body);
-			this.forceUpdate();
 		} else {
-			// 无食物
-			this.state.body.reverse();
-			this.state.body.push(this.head);
-			this.state.body.reverse();
-			this.head = tHead;
-			this.tail = this.state.body.pop();
+			let tHead = this.next(this.head);
+			if (this.head === -1) {
+				this.finish();
+			} else if (!SNAKE.IS_SELF && this.state.body.indexOf(this.head) !== -1) {
+				console.log(this.head, this.tail, this.state.body);
+				this.finish();
+			} else if (this.head === this.food) {
+				// 有食物
+				this.state.body.reverse();
+				this.state.body.push(this.head);
+				this.state.body.reverse();
+				this.props.getScore();
+				this.head = tHead;
+				this.food = randPosition(this.state.body);
+			} else {
+				// 无食物
+				this.state.body.reverse();
+				this.state.body.push(this.head);
+				this.state.body.reverse();
+				this.head = tHead;
+				this.tail = this.state.body.pop();
+			}
 		}
 
 		this.setState({
@@ -132,12 +190,11 @@ class Snake extends Component<IProps, IState> {
 		});
 	};
 
-	loop = (argTime: number) => {
+	loop = (argTime: number, callback = this.handleMove) => {
 		let startTime = new Date().getTime();
 		let restTime = 0;
-
 		if (this.isPlaying) {
-			this.handleMove();
+			callback();
 			restTime = argTime + startTime - new Date().getTime();
 			setTimeout(() => this.loop(argTime), restTime);
 		}
@@ -166,14 +223,12 @@ class Snake extends Component<IProps, IState> {
 			this.props.status === STATUS.PLAYING
 		) {
 			this.isPlaying = true;
-			this.loop(MAP.SPD_SNAKE);
+			this.loop(SNAKE.SPD_SNAKE);
 		}
 	}
 
 	render() {
-		let map: Array<number> = [];
-		map[MAP.BG_CELL * MAP.BG_LINE - 1] = mapView.empty;
-		map.fill(mapView.empty);
+		let map = Array(MAP.BG_CELL * MAP.BG_LINE).fill(mapView.empty);
 		for (let index = 0; index < this.state.body.length; index++) {
 			map[this.state.body[index]] = mapView.block;
 		}
@@ -197,6 +252,6 @@ const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
 	};
 };
 
-const GreedySnake = connect(mapStateToProps, mapDispatchToProps)(Snake);
+const Snake = connect(mapStateToProps, mapDispatchToProps)(SnakeView);
 
-export { GreedySnake };
+export { Snake };

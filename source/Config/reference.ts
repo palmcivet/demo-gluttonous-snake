@@ -1,21 +1,8 @@
-/**
- * Up / Down / Left / Right
- */
 enum dirOrien {
-	D,
 	U,
+	D,
 	L,
 	R,
-}
-
-/**
- * keyboard
- */
-enum dirKey {
-	W,
-	S,
-	A,
-	D,
 }
 
 enum mapView {
@@ -43,4 +30,4 @@ const i18n = {
 	},
 };
 
-export { dirOrien, dirKey, mapView, mapStyle, i18n };
+export { dirOrien, mapView, mapStyle, i18n };

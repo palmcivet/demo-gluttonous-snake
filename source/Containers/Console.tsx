@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { Keypad } from "./Keypad/Keypad";
 import { Screen } from "./Screen/Screen";
 import "./index.less";
