@@ -1,22 +1,10 @@
-import { i18n, dirOrien } from "../Config/reference";
-
-enum STATUS {
-	RESTING,
-	PLAYING,
-	PAUSING,
-}
-
-enum GAME {
-	GREEDYSNAKE,
-	TETRIS,
-}
+import { STATUS, GAME } from "../Config/reference";
+import { randOrientation } from "../Components/Snake/utils";
 
 enum ACTION_TYPES {
-	OVER = "GAME/OVER",
-	START = "GAME/START",
-	PAUSE = "GAME/PAUSE",
-	MUSIC = "GAME/MUSIC",
 	CHANGE = "GAME/CHANGE",
+	SCORE_GET = "GAME/SCORE_GET",
+	SCORE_INIT = "GAME/SCORE_INIT",
 }
 
 interface IAction {
@@ -26,84 +14,53 @@ interface IAction {
 
 interface IState {
 	type: ACTION_TYPES;
-	status: STATUS;
-	music: boolean;
 	game: null;
+	score: number;
 }
 
 const initState: IState = {
 	type: null,
-	status: STATUS.RESTING,
-	music: true,
 	game: null,
+	score: 0,
 };
 
 const creator = {
-	startGame: (): IAction => {
-		return {
-			type: ACTION_TYPES.START,
-		};
-	},
-	pauseGame: (): IAction => {
-		return {
-			type: ACTION_TYPES.PAUSE,
-		};
-	},
-	overGame: (): IAction => {
-		return {
-			type: ACTION_TYPES.OVER,
-		};
-	},
 	changeGame: (argGame: GAME): IAction => {
 		return {
 			type: ACTION_TYPES.CHANGE,
 			game: argGame,
 		};
 	},
-	toogleMusic: (): IAction => {
+	getScore: (): IAction => {
 		return {
-			type: ACTION_TYPES.MUSIC,
+			type: ACTION_TYPES.SCORE_GET,
+		};
+	},
+	initScore: (): IAction => {
+		return {
+			type: ACTION_TYPES.SCORE_INIT,
 		};
 	},
 };
 
 const reducer = (state = initState, action: IAction) => {
 	switch (action.type) {
-		case ACTION_TYPES.START:
-			document.title = i18n.cn.title_play;
-			return {
-				...state,
-				status: STATUS.PLAYING,
-			};
-		case ACTION_TYPES.PAUSE:
-			if (state.status === STATUS.PAUSING) {
-				document.title = i18n.cn.title_play;
-				return {
-					...state,
-					status: STATUS.PLAYING,
-				};
-			} else if (state.status === STATUS.PLAYING) {
-				document.title = i18n.cn.title_pause;
-				return {
-					...state,
-					status: STATUS.PAUSING,
-				};
-			}
-		case ACTION_TYPES.OVER:
-			document.title = i18n.cn.title_raw;
-			return {
-				...state,
-				status: STATUS.RESTING,
-			};
 		case ACTION_TYPES.CHANGE:
 			return {
 				...state,
 				game: action.game,
 			};
-		case ACTION_TYPES.MUSIC:
+
+		case ACTION_TYPES.SCORE_GET:
 			return {
 				...state,
-				music: !state.music,
+				score: state.score + 1,
+			};
+		case ACTION_TYPES.SCORE_INIT:
+			return {
+				...state,
+				dir: randOrientation(),
+				score: 0,
 			};
 		default:
 			return state;

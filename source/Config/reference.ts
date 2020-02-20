@@ -5,6 +5,17 @@ enum dirOrien {
 	R,
 }
 
+enum STATUS {
+	RESTING,
+	PLAYING,
+	PAUSING,
+}
+
+enum GAME {
+	GREEDYSNAKE,
+	TETRIS,
+}
+
 enum mapView {
 	block,
 	empty,
@@ -30,4 +41,4 @@ const i18n = {
 	},
 };
 
-export { dirOrien, mapView, mapStyle, i18n };
+export { dirOrien, GAME, STATUS, mapView, mapStyle, i18n };

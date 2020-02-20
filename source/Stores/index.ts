@@ -2,11 +2,11 @@ import { combineReducers } from "redux";
 import { reducer as gameReducer } from "./game";
 import { reducer as controlReducer } from "./control";
 
-const rootReducers = combineReducers({
+const rootReducer = combineReducers({
 	game: gameReducer,
 	control: controlReducer,
 });
 
-type RootState = ReturnType<typeof rootReducers>;
+type rootState = ReturnType<typeof rootReducer>;
 
-export { rootReducers, RootState };
+export { rootReducer, rootState };

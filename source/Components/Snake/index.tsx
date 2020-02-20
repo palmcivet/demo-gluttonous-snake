@@ -8,12 +8,12 @@ import { dirOrien, mapView } from "../../Config/reference";
 import { arr2num, num2arr, randPosition } from "./utils";
 import { Map } from "../../Containers/Screen/Map";
 import { MAP, SNAKE } from "../../Config/config";
-import { RootState } from "../../Stores";
+import { rootState } from "../../Stores";
 
 interface IProps {
 	dir: number;
 	status: STATUS;
-	overGame: any;
+	finish: any;
 	getScore: any;
 	initScore: any;
 }
@@ -56,7 +56,7 @@ class SnakeView extends Component<IProps, IState> {
 	};
 
 	finish = () => {
-		this.props.overGame();
+		this.props.finish();
 		this.upRefresh();
 		this.food = null;
 		this.head = null;
@@ -239,10 +239,10 @@ class SnakeView extends Component<IProps, IState> {
 	}
 }
 
-const mapStateToProps = (state: RootState) => {
+const mapStateToProps = (state: rootState) => {
 	return {
 		dir: state.control.dir,
-		status: state.game.status,
+		status: state.control.status,
 	};
 };
 

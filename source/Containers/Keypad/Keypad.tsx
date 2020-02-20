@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch, AnyAction } from "redux";
 
-import { creator as gameCreator, STATUS } from "../../Stores/game";
 import { creator as controlCreator } from "../../Stores/control";
+import { creator as gameCreator } from "../../Stores/game";
 import { dirOrien } from "../../Config/reference";
 import { ShiftButton } from "./ShiftButton";
 import { CtrlButton } from "./CtrlButton";
@@ -12,12 +12,12 @@ import { RootState } from "../../Stores";
 import "./index.less";
 
 interface IProps {
+	navigate: any;
 	shift: any;
-	changeDir: any;
-	startGame: any;
-	pauseGame: any;
-	toogleMusic: any;
-	status: STATUS;
+	start: any;
+	pause: any;
+	restart: any;
+	music: any;
 }
 
 class KeypadView extends Component<IProps> {
@@ -25,38 +25,20 @@ class KeypadView extends Component<IProps> {
 		super(props);
 	}
 
-	handleStart = () => {
-		if (this.props.status === STATUS.RESTING) {
-			this.props.startGame();
-		}
-	};
-
-	handlePause = () => {
-		this.props.pauseGame();
-	};
-
-	handleRestart = () => {
-		// TODO
-		this.props.startGame();
-	};
-
-	handleMusic = () => {
-		this.props.toogleMusic();
-	};
-
 	handleKeyboard = (argDir: string) => {
 		if (argDir == "ArrowUp" || argDir == "w" || argDir == "W") {
-			this.props.changeDir(dirOrien.U);
+			this.props.navigate(dirOrien.U);
 		} else if (argDir == "ArrowDown" || argDir == "s" || argDir == "S") {
-			this.props.changeDir(dirOrien.D);
+			this.props.navigate(dirOrien.D);
 		} else if (argDir == "ArrowLeft" || argDir == "a" || argDir == "A") {
-			this.props.changeDir(dirOrien.L);
+			this.props.navigate(dirOrien.L);
 		} else if (argDir == "ArrowRight" || argDir == "d" || argDir == "D") {
-			this.props.changeDir(dirOrien.R);
+			this.props.navigate(dirOrien.R);
 		} else if (argDir == "Enter") {
-			this.handleStart();
+			this.props.start();
+		} else if (argDir == "Space") {
+			this.props.shift();
 		} else {
-			// TODO
 			console.log("使用 上下左右键或 WASD");
 		}
 	};
@@ -73,12 +55,12 @@ class KeypadView extends Component<IProps> {
 		return (
 			<div className="keypad">
 				<CtrlButton callback={this.handleKeyboard} />
-				<ShiftButton callback={this.props.shift} />
+				<ShiftButton callback={() => this.props.shift} />
 				<SetButton
-					start={() => this.handleStart}
-					pause={() => this.handlePause}
-					restart={() => this.handleRestart}
-					music={() => this.handleMusic}
+					start={() => this.props.start}
+					pause={() => this.props.pause}
+					restart={() => this.props.restart}
+					music={() => this.props.music}
 				/>
 			</div>
 		);
@@ -86,9 +68,7 @@ class KeypadView extends Component<IProps> {
 }
 
 const mapStateToProps = (state: RootState) => {
-	return {
-		status: state.game.status,
-	};
+	return {};
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {

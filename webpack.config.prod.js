@@ -1,8 +1,8 @@
 const path = require("path");
 const merge = require("webpack-merge");
+const base = require("./webpack.config.base");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const base = require("./webpack.config.base");
 
 const OUTPUT = path.join(__dirname, "build");
 const STATIC = path.join(__dirname, "static");
@@ -34,14 +34,6 @@ module.exports = merge(base, {
 					"css-loader",
 					"less-loader",
 				],
-			},
-			{
-				test: /\.(png|jpg|jpeg|svg|gif|mp3|eot|woff|woff2|ttf)([\\?]?.*)$/,
-				loader: "file-loader",
-				options: {
-					name: "[hash:5].[ext]",
-					publicPath: "./assets",
-				},
 			},
 		],
 	},

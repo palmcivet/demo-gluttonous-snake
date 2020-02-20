@@ -1,11 +1,15 @@
+import { i18n, STATUS, GAME } from "../Config/reference";
 import { dirOrien } from "../Config/reference";
-import { randOrientation } from "../Components/Snake/utils";
+import { Dispatch } from "redux";
 
 enum ACTION_TYPES {
-	CHANGE_DIR = "CONTROL/CHANGE_DIR",
-	GET_SCORE = "CONTROL/GET_SCORE",
-	INIT_SCORE = "CONTROL/INIT_SCORE",
+	NAVIGATE = "CONTROL/NAVIGATE",
 	SHIFT = "CONTROL/SHIFT",
+	START = "CONTROL/START",
+	PAUSE = "CONTROL/PAUSE",
+	RESTART = "CONTROL/RESTART",
+	MUSIC = "CONTROL/MUSIC",
+	FINISH = "GAME/FINISH", // 独立于 control 模块
 }
 
 interface IAction {
@@ -15,30 +19,22 @@ interface IAction {
 
 interface IState {
 	type: ACTION_TYPES;
-	score: number;
+	status: STATUS;
+	music: boolean;
 	dir: dirOrien;
 }
 
 const initState: IState = {
 	type: null,
-	score: 0,
+	status: STATUS.RESTING,
+	music: true,
 	dir: null,
 };
 
 const creator = {
-	getScore: (): IAction => {
+	navigate: (argDir: dirOrien): IAction => {
 		return {
-			type: ACTION_TYPES.GET_SCORE,
-		};
-	},
-	initScore: (): IAction => {
-		return {
-			type: ACTION_TYPES.INIT_SCORE,
-		};
-	},
-	changeDir: (argDir: dirOrien): IAction => {
-		return {
-			type: ACTION_TYPES.CHANGE_DIR,
+			type: ACTION_TYPES.NAVIGATE,
 			dir: argDir,
 		};
 	},
@@ -47,22 +43,37 @@ const creator = {
 			type: ACTION_TYPES.SHIFT,
 		};
 	},
+	start: (): IAction => {
+		return {
+			type: ACTION_TYPES.START,
+		};
+	},
+	pause: (): IAction => {
+		return {
+			type: ACTION_TYPES.PAUSE,
+		};
+	},
+	restart: () => {
+		return (dispatch: Dispatch) => {
+			dispatch(creator.finish());
+			dispatch(creator.start());
+		};
+	},
+	music: (): IAction => {
+		return {
+			type: ACTION_TYPES.MUSIC,
+		};
+	},
+	finish: (): IAction => {
+		return {
+			type: ACTION_TYPES.FINISH,
+		};
+	},
 };
 
 const reducer = (state = initState, action: IAction) => {
 	switch (action.type) {
-		case ACTION_TYPES.GET_SCORE:
-			return {
-				...state,
-				score: state.score + 1,
-			};
-		case ACTION_TYPES.INIT_SCORE:
-			return {
-				...state,
-				dir: randOrientation(),
-				score: 0,
-			};
-		case ACTION_TYPES.CHANGE_DIR:
+		case ACTION_TYPES.NAVIGATE:
 			return {
 				...state,
 				dir: action.dir,
@@ -70,6 +81,48 @@ const reducer = (state = initState, action: IAction) => {
 		case ACTION_TYPES.SHIFT:
 			return {
 				...state,
+			};
+		case ACTION_TYPES.START:
+			if (state.status === STATUS.RESTING) {
+				document.title = i18n.cn.title_play;
+				return {
+					...state,
+					status: STATUS.PLAYING,
+				};
+			}
+		case ACTION_TYPES.PAUSE:
+			if (state.status === STATUS.PLAYING) {
+				document.title = i18n.cn.title_pause;
+				return {
+					...state,
+					status: STATUS.PAUSING,
+				};
+			} else if (state.status === STATUS.PAUSING) {
+				document.title = i18n.cn.title_play;
+				return {
+					...state,
+					status: STATUS.PLAYING,
+				};
+			}
+		case ACTION_TYPES.RESTART:
+			if (state.status === STATUS.PLAYING) {
+				document.title = i18n.cn.title_pause;
+				return {
+					...state,
+					status: STATUS.PLAYING,
+				};
+			}
+		case ACTION_TYPES.MUSIC:
+			return {
+				...state,
+				music: !state.music,
+			};
+		case ACTION_TYPES.FINISH:
+			document.title = i18n.cn.title_raw;
+
+			return {
+				...state,
+				status: STATUS.RESTING,
 			};
 		default:
 			return state;
