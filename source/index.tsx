@@ -2,8 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 
-import App from "./Pages/App";
-import { configureStore } from "./Stores/configureStore";
+import App from "./Page/App";
+import { configureStore } from "./Store/configureStore";
 import "./Styles/index.less";
 
 const rootStore = configureStore();

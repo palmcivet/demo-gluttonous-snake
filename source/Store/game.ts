@@ -1,5 +1,5 @@
 import { STATUS, GAME } from "../Config/reference";
-import { randOrientation } from "../Components/Snake/utils";
+import { randOrientation } from "../Component/Snake/utils";
 
 enum ACTION_TYPES {
 	CHANGE = "GAME/CHANGE",

@@ -1,4 +1,4 @@
-import { i18n, STATUS, GAME } from "../Config/reference";
+import { i18n, STATUS } from "../Config/reference";
 import { dirOrien } from "../Config/reference";
 import { Dispatch } from "redux";
 

@@ -8,7 +8,7 @@ const STATIC = path.join(__dirname, "static");
 module.exports = {
 	entry: path.join(ENTRY, "index.tsx"),
 	output: {
-		filename: "js/index.js",
+		filename: "script/index.js",
 		path: OUTPUT,
 	},
 	resolve: {
@@ -35,10 +35,17 @@ module.exports = {
 				loader: "source-map-loader",
 			},
 			{
-				test: /\.(png|jpg|jpeg|svg|gif|mp3|eot|woff|woff2|ttf)([\\?]?.*)$/,
+				test: /\.(png|jpg|jpeg|svg|gif)([\\?]?.*)$/,
 				loader: "file-loader",
 				options: {
-					name: "assets/[hash:5].[ext]",
+					name: "image/[hash:5].[ext]",
+				},
+			},
+			{
+				test: /\.(mp3)([\\?]?.*)$/,
+				loader: "file-loader",
+				options: {
+					name: "music/[hash:5].[ext]",
 				},
 			},
 		],

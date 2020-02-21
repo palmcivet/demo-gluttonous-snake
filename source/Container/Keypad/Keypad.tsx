@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch, AnyAction } from "redux";
 
-import { creator as controlCreator } from "../../Stores/control";
-import { creator as gameCreator } from "../../Stores/game";
+import { creator as controlCreator } from "../../Store/control";
+import { creator as gameCreator } from "../../Store/game";
 import { dirOrien } from "../../Config/reference";
 import { ShiftButton } from "./ShiftButton";
 import { CtrlButton } from "./CtrlButton";
 import { SetButton } from "./SetButton";
-import { RootState } from "../../Stores";
+import { rootState } from "../../Store/index";
 import "./index.less";
 
 interface IProps {
@@ -67,7 +67,7 @@ class KeypadView extends Component<IProps> {
 	}
 }
 
-const mapStateToProps = (state: RootState) => {
+const mapStateToProps = (state: rootState) => {
 	return {};
 };
 

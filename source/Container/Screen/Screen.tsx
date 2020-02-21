@@ -1,7 +1,7 @@
 import React from "react";
 import { Info } from "./Info";
 import "./index.less";
-import { Snake } from "../../Components/Snake/index";
+import { Snake } from "../../Component/Snake/index";
 
 const Screen = () => {
 	return (

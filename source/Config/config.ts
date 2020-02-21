@@ -1,7 +1,7 @@
 const MAP = {
 	BG_LINE: 22,
 	BG_CELL: 12,
-	SPD_REFRESH: 80,
+	SPD_REFRESH: 50,
 };
 
 const SNAKE = {

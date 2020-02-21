@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch, AnyAction } from "redux";
 
-import { creator as gameCreator, STATUS } from "../../Stores/game";
-import { creator as controlCreator } from "../../Stores/control";
+import { creator as gameCreator, STATUS } from "../../Store/game";
+import { creator as controlCreator } from "../../Store/control";
 import { dirOrien, mapView } from "../../Config/reference";
 import { arr2num, num2arr, randPosition } from "./utils";
-import { Map } from "../../Containers/Screen/Map";
+import { Map } from "../../Container/Screen/Map";
 import { MAP, SNAKE } from "../../Config/config";
-import { rootState } from "../../Stores";
+import { rootState } from "../../Store";
 
 interface IProps {
 	dir: number;
