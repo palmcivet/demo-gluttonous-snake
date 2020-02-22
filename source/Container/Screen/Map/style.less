@@ -1,0 +1,40 @@
+@import "../../../Styles/variable.less";
+
+.screen-map {
+	width: 160px;
+	height: 302px;
+	display: flex;
+	flex-wrap: wrap;
+
+	& .cell-map {
+		width: @min-cell;
+		height: @min-cell;
+		padding: @padding;
+		border: 1px solid #879372;
+		margin: 0 @margin @margin 0;
+
+		&::after {
+			content: "";
+			display: block;
+			width: @min-cell;
+			height: @min-cell;
+			background-color: #879372;
+		}
+	}
+
+	& .cell-block {
+		width: @min-cell;
+		height: @min-cell;
+		padding: @padding;
+		border: 1px solid #000000;
+		margin: 0 @margin @margin 0;
+
+		&::after {
+			content: "";
+			display: block;
+			width: @min-cell;
+			height: @min-cell;
+			background-color: #000000;
+		}
+	}
+}

@@ -1,6 +1,6 @@
 const MAP = {
-	BG_LINE: 22,
-	BG_CELL: 12,
+	BG_LINE: 20,
+	BG_CELL: 10,
 	SPD_REFRESH: 50,
 };
 

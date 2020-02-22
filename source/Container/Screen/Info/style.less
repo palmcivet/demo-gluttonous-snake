@@ -1,0 +1,74 @@
+@import "../../../Styles/variable.less";
+
+.screen-info {
+	width: 85px;
+	border: 1px solid #000000;
+
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: repeat(5, 1fr);
+	grid-column-gap: 0px;
+	grid-row-gap: 0px;
+	place-content: center center;
+
+	.score {
+		grid-row-start: 1;
+		grid-row-end: 2;
+		grid-column-start: 1;
+		grid-column-end: 2;
+	}
+	.mode {
+		grid-row-start: 2;
+		grid-row-end: 3;
+		grid-column-start: 1;
+		grid-column-end: 2;
+	}
+	.next {
+		grid-row-start: 3;
+		grid-row-end: 4;
+		grid-column-start: 1;
+		grid-column-end: 2;
+	}
+	.set {
+		grid-row-start: 4;
+		grid-row-end: 5;
+		grid-column-start: 1;
+		grid-column-end: 1;
+
+		display: flex;
+		flex-flow: row;
+		justify-content: space-around;
+		align-items: center;
+	}
+	.time {
+		grid-row-start: 5;
+		grid-row-end: 6;
+		grid-column-start: 1;
+		grid-column-end: 2;
+	}
+}
+
+.robot {
+	width: 22px;
+	height: 20px;
+}
+
+.music {
+	width: 22px;
+	height: 20px;
+	background-position: -175px -75px;
+
+	&.c {
+		background-position: -150px -75px;
+	}
+}
+
+.pause {
+	width: 20px;
+	height: 18px;
+	background-position: -100px -75px;
+
+	&.c {
+		background-position: -75px -75px;
+	}
+}

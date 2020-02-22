@@ -1,7 +1,7 @@
 import React from "react";
 import { Keypad } from "../../Container/Keypad/Keypad";
-import { Screen } from "../../Container/Screen/Screen";
-import "./index.less";
+import { Screen } from "../../Container/Screen";
+import "./style.less";
 
 const Console = () => {
 	return (

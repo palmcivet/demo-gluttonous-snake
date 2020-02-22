@@ -6,7 +6,7 @@ import { creator as gameCreator, STATUS } from "../../Store/game";
 import { creator as controlCreator } from "../../Store/control";
 import { dirOrien, mapView } from "../../Config/reference";
 import { arr2num, num2arr, randPosition } from "./utils";
-import { Map } from "../../Container/Screen/Map";
+import { Map } from "../../Container/Screen/Map/index";
 import { MAP, SNAKE } from "../../Config/config";
 import { rootState } from "../../Store";
 
@@ -33,6 +33,7 @@ class SnakeView extends Component<IProps, IState> {
 	constructor(props: IProps) {
 		super(props);
 		this.state = {
+			head: null,
 			body: [],
 		};
 	}
@@ -42,6 +43,7 @@ class SnakeView extends Component<IProps, IState> {
 		this.head = randPosition();
 		this.tail = this.head;
 		this.axis = false;
+		this.isPlaying = true;
 		this.setState(
 			{
 				head: this.head,
@@ -49,7 +51,6 @@ class SnakeView extends Component<IProps, IState> {
 			},
 			() => {
 				this.props.initScore();
-				this.isPlaying = true;
 				this.loop(SNAKE.SPD_SNAKE);
 			}
 		);
@@ -62,6 +63,10 @@ class SnakeView extends Component<IProps, IState> {
 		this.head = null;
 		this.tail = null;
 		this.isPlaying = false;
+		this.setState({
+			head: null,
+			body: [],
+		});
 		setTimeout(this.downRefresh, MAP.BG_LINE * MAP.SPD_REFRESH);
 	};
 

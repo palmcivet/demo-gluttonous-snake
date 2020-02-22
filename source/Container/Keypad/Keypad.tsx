@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch, AnyAction } from "redux";
-
 import { creator as controlCreator } from "../../Store/control";
 import { creator as gameCreator } from "../../Store/game";
 import { dirOrien } from "../../Config/reference";

@@ -1,6 +1,6 @@
 import React from "react";
-
-import { mapView, mapStyle } from "../../Config/reference";
+import { mapView, mapStyle } from "../../../Config/reference";
+import "./style.less";
 
 interface IProps {
 	table: number[];
