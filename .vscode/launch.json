@@ -5,9 +5,9 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "chrome",
+            "type": "firefox",
             "request": "launch",
-            "name": "Chrome",
+            "name": "Firefox",
             "url": "http://localhost:8081",
             "webRoot": "${workspaceFolder}"
         }
