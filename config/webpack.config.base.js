@@ -1,9 +1,8 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-
-const ENTRY = path.join(__dirname, "source");
-const OUTPUT = path.join(__dirname, "build");
-const STATIC = path.join(__dirname, "static");
+const ENTRY = path.join(__dirname, "../", "source");
+const OUTPUT = path.join(__dirname, "../", "build");
+const STATIC = path.join(__dirname, "../", "static");
 
 module.exports = {
 	entry: path.join(ENTRY, "index.tsx"),

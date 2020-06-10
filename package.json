@@ -1,16 +1,16 @@
 {
-	"name": "console-game",
+	"name": "mini-game",
 	"version": "0.1.0",
 	"main": "index.tsx",
-	"repository": "https://github.com/Palmcivet/console-game",
+	"repository": "https://github.com/Palmcivet/mini-game",
 	"author": "Palm Civet",
 	"license": "Apache-2.0",
 	"private": true,
 	"scripts": {
-		"build": "webpack --config webpack.config.dev.js",
-		"release": "webpack --config webpack.config.prod.js",
-		"server": "webpack-dev-server --config webpack.config.dev.js",
-		"clean": "rm -r ./build/*"
+		"build": "webpack --config ./config/webpack.config.dev.js",
+		"release": "webpack --config ./config/webpack.config.prod.js",
+		"debug": "webpack-dev-server --config ./config/webpack.config.dev.js",
+		"clean": "rm -r build/*"
 	},
 	"dependencies": {
 		"react": "^16.12.0",

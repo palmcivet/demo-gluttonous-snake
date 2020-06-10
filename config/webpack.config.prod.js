@@ -3,9 +3,8 @@ const merge = require("webpack-merge");
 const base = require("./webpack.config.base");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-
-const OUTPUT = path.join(__dirname, "build");
-const STATIC = path.join(__dirname, "static");
+const OUTPUT = path.join(__dirname, "../", "dist");
+const STATIC = path.join(__dirname, "../", "static");
 
 module.exports = merge(base, {
 	mode: "production",

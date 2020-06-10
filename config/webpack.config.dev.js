@@ -1,7 +1,6 @@
 const path = require("path");
 const merge = require("webpack-merge");
 const base = require("./webpack.config.base");
-
 const OUTPUT = path.join(__dirname, "build");
 
 module.exports = merge(base, {
