@@ -1,8 +1,5 @@
-# Mini Game
+# Gluttonous Snake
 
-## ToDo
-- [x] 贪吃蛇
-- [ ] 俄罗斯方块
-- [ ] 坦克大战
-- [ ] 2048
-- [ ] 迷宫
+- React
+- TypeScript
+- Less
