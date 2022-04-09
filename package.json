@@ -1,8 +1,8 @@
 {
-	"name": "gluttonous-snake",
+	"name": "demo-gluttonous-snake",
 	"version": "0.1.0",
 	"main": "index.tsx",
-	"repository": "https://github.com/Palmcivet/demo-gluttonous-snake",
+	"repository": "https://github.com/palmcivet/demo-gluttonous-snake",
 	"author": "Palm Civet",
 	"license": "Apache-2.0",
 	"private": true,
